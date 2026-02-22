@@ -1,0 +1,231 @@
+/* ── Editor layout ───────────────────────────────────────────────────────── */
+.editor-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #f0f0f1;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.editor-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  padding-top: 28px; /* macOS traffic lights */
+  height: 60px;
+  background: #1e1e1e;
+  color: #fff;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+.editor-header__back,
+.editor-header__list-view-btn,
+.editor-header__save-btn,
+.editor-header__title {
+  -webkit-app-region: no-drag;
+}
+
+.editor-header__back {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
+  font-size: 13px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+}
+
+.editor-header__back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.editor-header__list-view-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: #aaa;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+
+.editor-header__list-view-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.editor-header__list-view-btn.is-active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.editor-header__title {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  min-width: 0;
+  padding: 4px 0;
+  transition: border-color 0.15s;
+}
+
+.editor-header__title:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+.editor-header__title::placeholder {
+  color: #666;
+}
+
+.editor-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+.editor-header__status {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.editor-header__status--saving {
+  color: #f0c33c;
+}
+
+.editor-header__status--unsaved {
+  color: #ff6b6b;
+}
+
+.editor-header__save-btn {
+  padding: 5px 14px;
+  background: #3858e9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.editor-header__save-btn:hover {
+  background: #2145d8;
+}
+
+/* ── Editor body ─────────────────────────────────────────────────────────── */
+.editor-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── List View panel ─────────────────────────────────────────────────────── */
+.editor-list-view-panel {
+  width: 240px;
+  flex-shrink: 0;
+  border-right: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-list-view-panel__header {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #757575;
+  border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.editor-list-view-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+/* ── Canvas area ─────────────────────────────────────────────────────────── */
+.editor-canvas-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+}
+
+/* BlockTools renders anonymous wrapper divs with no class names.
+   Force every direct child div to stretch as a flex column. */
+.editor-canvas-wrap > div {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Second-level anonymous div (inner flex wrapper inside BlockTools).
+   Exclude the zero-size popover portal slots. */
+.editor-canvas-wrap > div > div:not(.popover-slot) {
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+/* Gutenberg's iframe host — anchor for absolute positioning below */
+.editor-canvas-wrap .block-editor-iframe__container {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The scale/zoom container — fill the container */
+.editor-canvas-wrap .block-editor-iframe__scale-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* The iframe itself */
+.editor-canvas-wrap iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.editor-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid #ddd;
+  background: #fff;
+  overflow-y: auto;
+}
+
+/* Keep the block inspector panel styles clean */
+.editor-sidebar .block-editor-block-inspector {
+  border-top: none;
+}

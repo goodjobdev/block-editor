@@ -1,0 +1,57 @@
+{
+    "name": "block-editor",
+    "version": "0.1.0",
+    "description": "Standalone Gutenberg Block Editor Desktop App",
+    "main": "./out/main/index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "ELECTRON_RUN_AS_NODE= electron-vite dev",
+        "build": "electron-vite build",
+        "preview": "ELECTRON_RUN_AS_NODE= electron-vite preview",
+        "typecheck:node": "tsc --noEmit -p tsconfig.node.json",
+        "typecheck:web": "tsc --noEmit -p tsconfig.web.json",
+        "typecheck": "npm run typecheck:node && npm run typecheck:web",
+        "browser-start": "node claude-scripts/browser-start.js",
+        "browser-nav": "node claude-scripts/browser-nav.js",
+        "browser-eval": "node claude-scripts/browser-eval.js",
+        "browser-screenshot": "node claude-scripts/browser-screenshot.js"
+    },
+    "dependencies": {
+        "@electron-toolkit/preload": "^3.0.0",
+        "@electron-toolkit/utils": "^3.0.0",
+        "@wordpress/block-editor": "15.12.0",
+        "@wordpress/block-library": "9.39.0",
+        "@wordpress/blocks": "15.12.0",
+        "@wordpress/components": "^28.0.0",
+        "@wordpress/data": "^10.0.0",
+        "@wordpress/format-library": "5.39.0",
+        "@wordpress/hooks": "^4.0.0",
+        "@wordpress/i18n": "^5.0.0",
+        "@wordpress/icons": "^10.0.0",
+        "@wordpress/rich-text": "7.39.0",
+        "puppeteer-core": "^23.11.1",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "uuid": "^10.0.0"
+    },
+    "overrides": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "@wordpress/upload-media": "0.24.0",
+        "@wordpress/block-editor": "15.12.0",
+        "@wordpress/rich-text": "7.39.0"
+    },
+    "devDependencies": {
+        "@electron-toolkit/tsconfig": "^1.0.0",
+        "@types/node": "^22.0.0",
+        "@types/react": "^18.3.0",
+        "@types/react-dom": "^18.3.0",
+        "@types/uuid": "^10.0.0",
+        "@vitejs/plugin-react": "^4.3.0",
+        "electron": "^33.0.0",
+        "electron-builder": "^25.1.0",
+        "electron-vite": "^5.0.0",
+        "typescript": "^5.6.0",
+        "vite": "^6.0.0"
+    }
+}
