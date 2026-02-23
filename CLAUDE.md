@@ -73,11 +73,13 @@ Required for the BlockCanvas iframe to run block scripts (blob: URL inline scrip
 ```json
 "@wordpress/block-editor": "15.12.0"   // exact — 15.13.0 pulls in @wordpress/vips
 "@wordpress/block-library": "9.39.0"   // exact — 9.40.0 → upload-media@0.25.0 → vips
+"@wordpress/rich-text": "7.39.0"       // exact — see instanceof RichTextData bug below
 "overrides": {
   "react": "18.3.1",
   "react-dom": "18.3.1",
   "@wordpress/upload-media": "0.24.0",  // 0.25.0 requires vips (not available)
-  "@wordpress/block-editor": "15.12.0"
+  "@wordpress/block-editor": "15.12.0",
+  "@wordpress/rich-text": "7.39.0"      // force single copy — multiple versions break instanceof checks
 }
 ```
 After changing overrides, always run `npm dedupe` to eliminate nested copies.
@@ -100,6 +102,17 @@ import blockLibCSS from '@wordpress/block-library/build-style/style.css?raw'
 
 ### `@wordpress/format-library/build-style/style.css` doesn't exist
 Don't import it. The format library handles its own styling via JS.
+
+### `instanceof RichTextData` breaks with duplicate package versions (blank canvas bug)
+Gutenberg uses `instanceof RichTextData` in `useRichText` to detect pre-parsed rich text values. If `@wordpress/blocks` (which calls `parse()`) uses a different copy of `@wordpress/rich-text` than `@wordpress/block-editor` (which runs `useRichText`), the `instanceof` check fails. This causes `create({ html: richTextDataInstance })` to return `createEmptyValue()` → every block renders blank with a BOM (`\uFEFF`) placeholder.
+
+**Symptom**: Blocks appear in List View but the canvas is blank on reopen. Typing wipes existing content.
+
+**Fix**: Pin `@wordpress/rich-text` to a single version in both `dependencies` and `overrides`, then run `npm dedupe`. Verify with:
+```bash
+find node_modules -path "*/rich-text/package.json" | xargs grep '"version"'
+```
+All entries should show the same version with no nested duplicates.
 
 ## IPC Channels
 
@@ -126,7 +139,6 @@ npm run preview  # preview production build
 
 ## What to Tackle Next
 
-- **Test all CRUD operations end-to-end**: create page → open editor → type → auto-save → back → verify persisted → delete
 - **Silence the PostCSS browser warnings**: alias `path`/`fs`/`source-map-js` to no-op browser stubs in `electron.vite.config.ts`'s `renderer.resolve.alias`
 - **Native media upload dialog**: replace the `window.prompt()` URL stub in `mediaUpload.ts` with a real Electron file-dialog call via `ipcMain.handle('dialog:openFile', ...)`
 - **TypeScript strictness**: run `npm run typecheck` and fix any remaining type errors in the wordpress-shims.d.ts declarations
